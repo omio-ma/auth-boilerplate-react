@@ -29,6 +29,23 @@ Required environment variables:
 | `VITE_AUTH0_CLIENT_ID` | SPA client ID configured with rotating refresh tokens enabled. |
 | `VITE_AUTH0_AUDIENCE` | (Optional) API identifier for issuing access tokens. |
 
+### Auth0 dashboard settings
+
+When the Auth0 application does not know how to send users back to Vite it causes an immediate
+`/callback → login → /callback` loop. Fix this in the Auth0 dashboard (Applications → *Your SPA* →
+Settings) by filling in **all** of the URL fields below before attempting to log in:
+
+| Field | Value for local dev |
+| --- | --- |
+| **Application Login URI** | `http://localhost:5173` |
+| **Allowed Callback URLs** | `http://localhost:5173` |
+| **Allowed Logout URLs** | `http://localhost:5173` |
+| **Allowed Web Origins** | `http://localhost:5173` |
+
+For production, add the final domain(s) alongside the localhost entries. The application uses
+`window.location.origin` as the `redirect_uri`, so every environment where you host this app must be
+present in the four fields above.
+
 ## Auth flow
 
 1. Any request to `/` renders a protected route. Without a session, the Auth0 SDK automatically redirects to
